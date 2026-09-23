@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import posthog from "posthog-js";
 
 // Presentational until learner progress is stored; the page passes 0 for now.
 export function CourseProgressBar({ percent, href }: { percent: number; href: string | null }) {
@@ -32,6 +35,11 @@ export function CourseProgressBar({ percent, href }: { percent: number; href: st
         {href && (
           <Link
             href={href}
+            onClick={() =>
+              posthog.capture("course_learning_continued", {
+                progress_percent: clamped,
+              })
+            }
             className="inline-flex h-12 items-center justify-center gap-3 rounded-md bg-primary-500 px-7 text-sm font-medium text-white shadow-md transition-colors hover:bg-primary-400"
           >
             Continue Learning

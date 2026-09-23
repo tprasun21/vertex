@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { BarChart2, Clock, Folder } from "lucide-react";
+import posthog from "posthog-js";
 import { capitalize, formatDuration, pluralize } from "@/lib/format";
 import { urlFor } from "@/lib/sanity/image";
 import type { COURSES_QUERY_RESULT } from "@/sanity.types";
@@ -27,6 +30,16 @@ function CourseTile({ course }: { course: Course }) {
   return (
     <Link
       href={`/courses/${course.slug}`}
+      onClick={() =>
+        posthog.capture("course_selected", {
+          course_id: course._id,
+          course_slug: course.slug,
+          course_level: course.level,
+          course_duration_minutes: course.durationMinutes,
+          course_module_count: course.moduleCount,
+          course_popular: course.popular,
+        })
+      }
       className="flex h-full flex-col rounded-lg border border-neutral-200 bg-white p-6 shadow-sm outline-none transition-shadow hover:shadow-lg focus-visible:ring-2 focus-visible:ring-primary-400"
     >
       <span className="relative size-[72px] shrink-0 overflow-hidden rounded-md bg-neutral-100">
