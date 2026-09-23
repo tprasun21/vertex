@@ -15,6 +15,9 @@ export const OUTCOME_ICONS = [
   {title: 'Terminal', value: 'terminal'},
   {title: 'Server', value: 'server'},
   {title: 'Lock', value: 'lock'},
+  {title: 'Workflow', value: 'workflow'},
+  {title: 'Sparkles', value: 'sparkles'},
+  {title: 'Puzzle', value: 'puzzle'},
 ]
 
 export const learningOutcome = defineType({
