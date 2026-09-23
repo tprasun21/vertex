@@ -1,6 +1,6 @@
 // Turns the provided seed into schema-valid documents for `sanity dataset import`.
 // The source file is never modified. Output: .seed/seed.ndjson (git-ignored).
-// Usage: npm run seed:prepare && npm run seed:import
+// Usage: npm run seed:import (runs this first), or npm run seed:prepare to only build and validate.
 
 import {mkdirSync, readFileSync, writeFileSync} from 'node:fs'
 import {dirname, resolve} from 'node:path'
@@ -143,6 +143,8 @@ if (errors.length) {
 mkdirSync(dirname(OUTPUT), {recursive: true})
 writeFileSync(OUTPUT, docs.map((doc) => JSON.stringify(doc)).join('\n') + '\n')
 
-const counts = Object.groupBy(docs, (doc) => doc._type)
+// A loop instead of Object.groupBy, which Node 20 lacks.
+const counts = {}
+for (const doc of docs) counts[doc._type] = (counts[doc._type] ?? 0) + 1
 console.log(`Wrote ${docs.length} documents to ${OUTPUT}`)
-for (const [type, items] of Object.entries(counts)) console.log(`  ${type}: ${items.length}`)
+for (const [type, count] of Object.entries(counts)) console.log(`  ${type}: ${count}`)

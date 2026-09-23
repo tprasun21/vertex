@@ -43,7 +43,7 @@ Out of scope: video documents (chapters and transcript chunks come from the inge
    - outcome icons and resource types are in the schema lists.
 5. **npm scripts in `studio/package.json`:**
    - `seed:prepare` runs `node scripts/prepare-seed.mjs`.
-   - `seed:import` runs `node scripts/import-seed.mjs`. The wrapper reads `SANITY_STUDIO_DATASET` from `studio/.env` and runs `sanity dataset import .seed/seed.ndjson --dataset <it> --replace`. It exists because, during implementation, `sanity dataset import` did not take the dataset from `sanity.cli.ts`. `--replace` makes re-runs idempotent.
+   - `seed:import` runs `seed:prepare` first and imports only if preparation succeeds. It then runs `node scripts/import-seed.mjs`. The wrapper reads `SANITY_STUDIO_DATASET` from `studio/.env` and runs `sanity dataset import .seed/seed.ndjson --dataset <it> --replace`. It exists because, during implementation, `sanity dataset import` did not take the dataset from `sanity.cli.ts`. `--replace` makes re-runs idempotent.
 6. Images use `_sanityAsset` URLs: i.ytimg.com for thumbnails (each video's own frame), randomuser.me for instructor photos, and picsum.photos seeded by slug for course covers. The user confirmed these sources. The import uploads them as Sanity assets. Do not pass `--allow-failing-assets`, so a host failure is reported instead of hidden.
 7. Videos: every lesson keeps its own unique, topic-matched YouTube URL from the seed. The user confirmed this.
 
