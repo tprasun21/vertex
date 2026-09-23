@@ -32,11 +32,13 @@ export function Navbar() {
           </span>
           <Show when="signed-out">
             <div className="flex items-center gap-2 sm:gap-4">
-              <SignInButton mode="modal">
-                <Button variant="text" className="h-9">
-                  Sign in
-                </Button>
-              </SignInButton>
+              <span className="hidden sm:inline-flex">
+                <SignInButton mode="modal">
+                  <Button variant="text" className="h-9">
+                    Sign in
+                  </Button>
+                </SignInButton>
+              </span>
               <SignUpButton mode="modal">
                 <Button variant="primary" className="h-9 px-3.5">
                   Sign up

@@ -31,6 +31,8 @@ Wire up Clerk authentication into the Vertex Next.js app so there's a working si
 ## Files expected to touch
 - `package.json` / `package-lock.json` — new `@clerk/nextjs` dependency (via `clerk init`).
 - `proxy.ts` (or `middleware.ts`, whichever `clerk init` generates for Next.js 16) — new, unprotected matcher config.
+- `app/sign-in/[[...sign-in]]/page.tsx` — new, Clerk's hosted `<SignIn />` catch-all route.
+- `app/sign-up/[[...sign-up]]/page.tsx` — new, Clerk's hosted `<SignUp />` catch-all route.
 - `app/layout.tsx` — wrap children in `ClerkProvider`.
 - `components/ui/Navbar.tsx` — swap the placeholder bell/avatar slot for Clerk auth controls.
 - `.env.local` — created by the CLI, not committed (already git-ignored).
