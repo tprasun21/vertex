@@ -1,5 +1,7 @@
 # Implementation prompt: PostHog reverse proxy, then ship the PostHog integration
 
+> Follow-up: the proxy path was later renamed from `/ingest` to `/vx-signal` (see `posthog-dev-console-errors.md`).
+
 ## Goal
 
 1. Fix the dev console errors: `[PostHog.js] [Dead Clicks] "failed to load script"` and `[SessionRecording] "could not load recorder"`.

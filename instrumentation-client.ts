@@ -15,11 +15,12 @@ if (!projectToken || !apiHost) {
   }
 } else {
   posthog.init(projectToken, {
-    // Proxied by the /ingest rewrites in next.config.ts.
-    api_host: "/ingest",
+    // Proxied by the /vx-signal rewrites in next.config.ts.
+    api_host: "/vx-signal",
     ui_host: apiHost.replace(".i.posthog.com", ".posthog.com"),
     defaults: "2026-05-30",
     capture_exceptions: true,
-    debug: process.env.NODE_ENV === "development",
+    // Opt-in: debug mode logs every event and prints expected blocker failures as errors.
+    debug: process.env.NEXT_PUBLIC_POSTHOG_DEBUG === "true",
   });
 }
