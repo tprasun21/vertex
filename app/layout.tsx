@@ -1,3 +1,4 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
@@ -23,7 +24,21 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${playfairDisplay.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <ClerkProvider
+          appearance={{
+            variables: {
+              colorPrimary: "#f97316",
+              colorForeground: "#0f172a",
+              colorBackground: "#ffffff",
+              borderRadius: "12px",
+              fontFamily: "var(--font-inter), Arial, Helvetica, sans-serif",
+            },
+          }}
+        >
+          {children}
+        </ClerkProvider>
+      </body>
     </html>
   );
 }
