@@ -78,6 +78,26 @@ export const LESSON_BY_SLUG_QUERY = defineQuery(`
   }
 `);
 
+// Search hydration. The search agent only picks lesson ids; everything a result shows
+// is read here. Unpublished lesson refs resolve to null in lessonIds, as on the lesson page.
+export const SEARCH_LESSONS_QUERY = defineQuery(`
+  *[_type == "lesson" && _id in $ids] {
+    _id,
+    title,
+    "slug": slug.current,
+    summary,
+    keyPoints,
+    durationMinutes,
+    "course": *[_type == "course" && references(^._id)] | order(_createdAt asc) [0] {
+      _id,
+      title,
+      "slug": slug.current,
+      coverImage,
+      modules[] { title, "lessonIds": lessons[]->_id }
+    }
+  }
+`);
+
 export const INSTRUCTOR_BY_SLUG_QUERY = defineQuery(`
   *[_type == "instructor" && slug.current == $slug][0] {
     _id,

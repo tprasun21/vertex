@@ -6,6 +6,9 @@ export default defineCliConfig({
     dataset: process.env.SANITY_STUDIO_DATASET,
   },
   deployment: {
+    // Hosted at https://vertex-n2c3rnrz.sanity.studio. The Context MCP only serves
+    // datasets with a deployed Studio.
+    appId: 'cu2mlxoej9tmqgadxq0x1ey4',
     autoUpdates: true,
   },
   typegen: {
