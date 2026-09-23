@@ -31,7 +31,8 @@ export function CourseCard({
       <div className="flex items-start gap-3">
         <span
           className={cn(
-            "flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-sm bg-neutral-900 text-white",
+            "flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-sm text-white",
+            !iconClassName && "bg-neutral-900",
             iconClassName
           )}
         >

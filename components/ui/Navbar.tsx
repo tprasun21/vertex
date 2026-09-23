@@ -22,13 +22,12 @@ export function Navbar({ user }: { user?: { avatarUrl?: string } }) {
           </Link>
         </div>
         <div className="flex shrink-0 items-center gap-2 sm:gap-4">
-          <button
-            type="button"
-            aria-label="Notifications"
-            className="flex size-9 items-center justify-center rounded-full text-neutral-700 hover:bg-neutral-100"
+          <span
+            aria-hidden="true"
+            className="flex size-9 items-center justify-center rounded-full text-neutral-700"
           >
             <Bell className="size-5" />
-          </button>
+          </span>
           <span className="size-9 shrink-0 overflow-hidden rounded-full bg-neutral-200">
             {user?.avatarUrl && (
               // eslint-disable-next-line @next/next/no-img-element

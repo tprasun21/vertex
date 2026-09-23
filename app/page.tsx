@@ -66,7 +66,14 @@ export default function Home() {
           </Link>
 
           <div className="w-full max-w-2xl">
-            <Input placeholder="Ask anything about your learning..." hint="⌘K" />
+            <label htmlFor="homepage-search" className="sr-only">
+              Ask anything about your learning
+            </label>
+            <Input
+              id="homepage-search"
+              placeholder="Ask anything about your learning..."
+              hint="⌘K"
+            />
           </div>
         </section>
 
