@@ -17,7 +17,7 @@ export type SidebarModule = {
   lessons: SidebarLesson[];
 };
 
-type SidebarCourse = { title: string; slug: string; coverUrl: string; coverAlt: string };
+type SidebarCourse = { title: string; slug: string; coverUrl: string | null; coverAlt: string };
 
 // Progress is presentational until learner progress is stored; the page passes 0.
 export function LessonSidebar({
@@ -66,7 +66,9 @@ export function LessonSidebar({
 
         <div className="mt-7 flex items-center gap-4">
           <span className="relative size-[60px] shrink-0 overflow-hidden rounded-sm bg-neutral-900">
-            <Image src={course.coverUrl} alt={course.coverAlt} fill sizes="60px" className="object-cover" />
+            {course.coverUrl && (
+              <Image src={course.coverUrl} alt={course.coverAlt} fill sizes="60px" className="object-cover" />
+            )}
           </span>
           <div className="min-w-0">
             <p className="text-[15px] font-medium leading-5 text-neutral-900">{course.title}</p>

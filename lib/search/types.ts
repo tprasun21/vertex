@@ -6,7 +6,8 @@ export type SearchCourse = {
   id: string;
   title: string;
   slug: string;
-  iconUrl: string;
+  // Null when the course cover has no asset (imports can skip the Studio's required rule).
+  iconUrl: string | null;
   iconAlt: string;
 };
 

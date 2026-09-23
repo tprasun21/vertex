@@ -91,7 +91,10 @@ export function LessonContent({
 }
 
 function ResourceCard({ resource }: { resource: Resource }) {
-  const onGitHub = resource.type === "repository" && new URL(resource.url).hostname === "github.com";
+  const onGitHub =
+    resource.type === "repository" &&
+    URL.canParse(resource.url) &&
+    new URL(resource.url).hostname === "github.com";
   const Icon = resourceIcons[resource.type] ?? FileText;
 
   return (

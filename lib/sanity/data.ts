@@ -109,7 +109,9 @@ export async function getSearchLessons(ids: string[]): Promise<LessonResult[]> {
           id: course._id,
           title: course.title,
           slug: course.slug,
-          iconUrl: urlFor(course.coverImage).width(44).height(44).fit("crop").url(),
+          iconUrl: course.coverImage.asset
+            ? urlFor(course.coverImage).width(44).height(44).fit("crop").url()
+            : null,
           iconAlt: course.coverImage.alt || course.title,
         },
       };

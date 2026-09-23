@@ -67,7 +67,9 @@ export default async function LessonPage({ params }: PageProps<"/lessons/[slug]"
           course={{
             title: course.title,
             slug: course.slug,
-            coverUrl: urlFor(course.coverImage).width(112).height(112).fit("crop").url(),
+            coverUrl: course.coverImage.asset
+              ? urlFor(course.coverImage).width(112).height(112).fit("crop").url()
+              : null,
             coverAlt: course.coverImage.alt || course.title,
           }}
           modules={course.modules}

@@ -53,7 +53,9 @@ export async function POST(request: Request) {
 
   const { query } = parsed.data;
   const cacheKey = query.toLowerCase().replace(/\s+/g, " ");
-  const signal = AbortSignal.any([request.signal, AbortSignal.timeout(SEARCH_TIMEOUT_MS)]);
+  // Aborted from the stream's cancel(), in case request.signal never fires on disconnect.
+  const disconnect = new AbortController();
+  const signal = AbortSignal.any([request.signal, disconnect.signal, AbortSignal.timeout(SEARCH_TIMEOUT_MS)]);
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream<Uint8Array>({
@@ -93,7 +95,7 @@ export async function POST(request: Request) {
         writeCache(cacheKey, value);
         send({ ...value, cached: false });
       } catch (error) {
-        if (request.signal.aborted) return;
+        if (request.signal.aborted || disconnect.signal.aborted) return;
         console.error("[search] failed", error);
         const timedOut = signal.reason instanceof DOMException && signal.reason.name === "TimeoutError";
         send({
@@ -109,6 +111,9 @@ export async function POST(request: Request) {
           // Already closed by a disconnect.
         }
       }
+    },
+    cancel() {
+      disconnect.abort();
     },
   });
 
