@@ -74,7 +74,10 @@ export type LearningOutcome = {
     | "book-open"
     | "terminal"
     | "server"
-    | "lock";
+    | "lock"
+    | "workflow"
+    | "sparkles"
+    | "puzzle";
   title: string;
   description?: string;
 };
@@ -405,10 +408,13 @@ export type COURSE_BY_SLUG_QUERY_RESULT = {
       | "gauge"
       | "layers"
       | "lock"
+      | "puzzle"
       | "rocket"
       | "server"
       | "shield"
+      | "sparkles"
       | "terminal"
+      | "workflow"
       | "zap";
     title: string;
     description: string | null;
