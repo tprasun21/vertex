@@ -18,30 +18,30 @@ export default async function Home() {
       <Navbar />
 
       <main className="flex flex-1 flex-col">
-        <section className="flex flex-col items-center gap-8 border-b border-neutral-200 px-6 py-20 text-center sm:py-24">
-          <span className="rounded-full border border-primary-200 bg-primary-100 px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-primary-500">
+        <section className="flex flex-col items-center border-b border-neutral-200 px-6 pb-20 pt-16 text-center sm:pb-32 sm:pt-28">
+          <span className="rounded-full border border-primary-200 bg-primary-100 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary-500">
             Intelligent Learning
           </span>
 
-          <h1 className="max-w-3xl font-display text-4xl font-bold leading-tight text-neutral-900 sm:text-display-1">
+          <h1 className="mt-8 max-w-4xl font-display text-[40px] font-bold leading-[1.1] text-neutral-900 sm:text-[56px] lg:text-[64px] lg:leading-[1.08]">
             Search your learning
             <br className="hidden sm:block" /> in plain English.
           </h1>
 
-          <p className="max-w-xl text-body-lg text-neutral-500">
+          <p className="mt-6 max-w-2xl text-balance text-body-lg text-neutral-500 sm:text-xl sm:leading-8">
             Vertex understands what you want to learn and finds the exact lessons across
             all your courses.
           </p>
 
           <Link
             href="/courses"
-            className="inline-flex h-11 items-center justify-center gap-1.5 rounded-md bg-primary-500 px-4 text-sm font-medium text-white transition-colors hover:bg-primary-400"
+            className="mt-10 inline-flex h-12 items-center justify-center gap-2 rounded-md bg-primary-500 px-6 text-base font-medium text-white shadow-md transition-colors hover:bg-primary-400 sm:h-14 sm:px-7"
           >
             Explore Courses
             <ArrowRight className="size-4" />
           </Link>
 
-          <div className="w-full max-w-2xl">
+          <div className="mt-12 w-full max-w-3xl sm:mt-14">
             <label htmlFor="homepage-search" className="sr-only">
               Ask anything about your learning
             </label>
@@ -49,6 +49,7 @@ export default async function Home() {
               id="homepage-search"
               placeholder="Ask anything about your learning..."
               hint="⌘K"
+              size="lg"
             />
           </div>
         </section>
