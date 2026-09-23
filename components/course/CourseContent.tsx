@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown, PlayCircle } from "lucide-react";
+import posthog from "posthog-js";
 import { cn } from "@/lib/cn";
 import { formatDuration } from "@/lib/format";
 
@@ -32,13 +33,33 @@ export function CourseContent({ modules }: { modules: ContentModule[] }) {
   const hasMore = modules.length > INITIAL_VISIBLE;
   const visible = showAll ? modules : modules.slice(0, INITIAL_VISIBLE);
 
-  const toggle = (key: string) =>
+  const toggle = (module: ContentModule) => {
+    const expanded = !open.has(module._key);
+
     setOpen((current) => {
       const next = new Set(current);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
+      if (next.has(module._key)) next.delete(module._key);
+      else next.add(module._key);
       return next;
     });
+
+    posthog.capture("course_module_toggled", {
+      module_key: module._key,
+      module_number: module.number,
+      module_duration_minutes: module.durationMinutes,
+      lesson_count: module.lessons.length,
+      expanded,
+    });
+  };
+
+  const toggleAllModules = () => {
+    const expanded = !showAll;
+    setShowAll(expanded);
+    posthog.capture("course_modules_visibility_changed", {
+      module_count: modules.length,
+      expanded,
+    });
+  };
 
   return (
     <div className={cn("relative", hasMore && "pb-5")}>
@@ -52,7 +73,7 @@ export function CourseContent({ modules }: { modules: ContentModule[] }) {
                 type="button"
                 aria-expanded={isOpen}
                 aria-controls={panelId}
-                onClick={() => toggle(module._key)}
+                onClick={() => toggle(module)}
                 className="flex w-full items-center gap-4 px-4 py-3 text-left transition-colors hover:bg-neutral-50 sm:gap-6 sm:px-5"
               >
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-full border border-neutral-200 font-display text-base text-neutral-900">
@@ -89,6 +110,17 @@ export function CourseContent({ modules }: { modules: ContentModule[] }) {
                     <li key={lesson._id}>
                       <Link
                         href={`/lessons/${lesson.slug}`}
+                        onClick={() =>
+                          posthog.capture("lesson_selected", {
+                            lesson_id: lesson._id,
+                            lesson_slug: lesson.slug,
+                            lesson_duration_minutes: lesson.durationMinutes,
+                            lesson_number: index + 1,
+                            module_key: module._key,
+                            module_number: module.number,
+                            free_preview: Boolean(lesson.freePreview),
+                          })
+                        }
                         className="group flex items-center gap-3 rounded-sm py-2 text-sm"
                       >
                         <PlayCircle aria-hidden="true" className="size-4 shrink-0 text-neutral-500 group-hover:text-primary-500" />
@@ -121,7 +153,7 @@ export function CourseContent({ modules }: { modules: ContentModule[] }) {
           <button
             type="button"
             aria-expanded={showAll}
-            onClick={() => setShowAll((value) => !value)}
+            onClick={toggleAllModules}
             className="inline-flex h-11 items-center gap-3 rounded-sm border border-neutral-200 bg-white px-6 text-sm text-neutral-900 shadow-sm transition-colors hover:bg-neutral-50"
           >
             {showAll ? "Show fewer modules" : `Show all ${modules.length} modules`}
