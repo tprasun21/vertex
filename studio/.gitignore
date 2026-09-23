@@ -2,3 +2,4 @@
 dist
 .sanity
 schema.json
+.seed

@@ -2,41 +2,17 @@ import Link from "next/link";
 import { ArrowRight, Star } from "lucide-react";
 import { Navbar } from "@/components/ui/Navbar";
 import { Input } from "@/components/ui/Input";
-import { CourseCard } from "@/components/ui/Card";
+import { CourseGrid } from "@/components/course/CourseGrid";
+import { getCourses } from "@/lib/sanity/data";
 
-const courses = [
-  {
-    icon: "N",
-    iconClassName: "bg-neutral-900 font-display text-lg font-bold text-white",
-    title: "Next.js for Production",
-    description: "Build scalable, high-performance web applications with Next.js.",
-    level: "Intermediate",
-    duration: "18h 24m",
-    modules: "12 modules",
-  },
-  {
-    icon: "🐳",
-    iconClassName: "bg-sky-50 text-xl",
-    title: "Docker Essentials",
-    description: "Containerize applications and streamline your development workflow.",
-    level: "Beginner",
-    duration: "10h 12m",
-    modules: "8 modules",
-  },
-  {
-    icon: "TS",
-    iconClassName: "bg-[#3178c6] font-display text-lg font-bold text-white",
-    title: "TypeScript Deep Dive",
-    description: "Go beyond the basics and write safer, more expressive code.",
-    level: "Intermediate",
-    duration: "14h 36m",
-    modules: "10 modules",
-  },
-];
+const FEATURED_COURSE_COUNT = 3;
 
 const barHeights = [64, 96, 128, 88, 56, 40, 72, 112, 144, 100, 60];
 
-export default function Home() {
+export default async function Home() {
+  // Popular courses first, then by title (see COURSES_QUERY).
+  const courses = (await getCourses()).slice(0, FEATURED_COURSE_COUNT);
+
   return (
     <div className="flex flex-1 flex-col bg-neutral-50">
       <Navbar />
@@ -91,20 +67,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {courses.map((course) => (
-              <CourseCard
-                key={course.title}
-                icon={course.icon}
-                iconClassName={course.iconClassName}
-                title={course.title}
-                description={course.description}
-                level={course.level}
-                duration={course.duration}
-                modules={course.modules}
-              />
-            ))}
-          </div>
+          {courses.length > 0 && <CourseGrid courses={courses} />}
         </section>
 
         <div className="mx-auto flex w-full max-w-[1440px] items-center gap-4 px-6">
