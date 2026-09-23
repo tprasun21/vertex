@@ -1,8 +1,10 @@
 import "server-only";
 
+import type { LessonResult } from "@/lib/search/types";
 import type { LESSON_BY_SLUG_QUERY_RESULT } from "@/sanity.types";
 
 import { sanityFetch } from "./fetch";
+import { urlFor } from "./image";
 import {
   CATEGORIES_QUERY,
   COURSE_BY_SLUG_QUERY,
@@ -12,6 +14,7 @@ import {
   INSTRUCTOR_SLUGS_QUERY,
   LESSON_BY_SLUG_QUERY,
   LESSON_SLUGS_QUERY,
+  SEARCH_LESSONS_QUERY,
 } from "./queries";
 
 // Every page that renders a course also shows lesson, instructor, and category
@@ -72,6 +75,49 @@ export async function getLessonBySlug(slug: string) {
     previous: toLink(sequence[position - 1]),
     next: toLink(sequence[position + 1]),
   };
+}
+
+// Grounds search results: keeps the agent's rank order, drops ids that don't resolve to
+// a published lesson in a course, and numbers lessons exactly like getLessonBySlug.
+export async function getSearchLessons(ids: string[]): Promise<LessonResult[]> {
+  if (ids.length === 0) return [];
+
+  const lessons = await sanityFetch({ query: SEARCH_LESSONS_QUERY, params: { ids }, tags: CONTENT_TAGS });
+  const byId = new Map(lessons.map((lesson) => [lesson._id, lesson]));
+
+  return ids.flatMap((id) => {
+    const lesson = byId.get(id);
+    const course = lesson?.course;
+    if (!lesson || !course) return [];
+
+    for (const [moduleIndex, module] of (course.modules ?? []).entries()) {
+      const lessonIndex = (module.lessonIds ?? []).filter(Boolean).indexOf(id);
+      if (lessonIndex === -1) continue;
+
+      const result: LessonResult = {
+        kind: "lesson",
+        id,
+        href: `/lessons/${lesson.slug}`,
+        title: lesson.title,
+        description: lesson.summary,
+        keyPoints: (lesson.keyPoints ?? []).slice(0, 3),
+        durationMinutes: lesson.durationMinutes,
+        label: `${moduleIndex + 1}.${lessonIndex + 1}`,
+        moduleNumber: moduleIndex + 1,
+        moduleTitle: module.title,
+        course: {
+          id: course._id,
+          title: course.title,
+          slug: course.slug,
+          iconUrl: urlFor(course.coverImage).width(44).height(44).fit("crop").url(),
+          iconAlt: course.coverImage.alt || course.title,
+        },
+      };
+      return [result];
+    }
+
+    return [];
+  });
 }
 
 export function getInstructorBySlug(slug: string) {

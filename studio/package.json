@@ -10,7 +10,8 @@
     "schema:deploy": "sanity schema deploy",
     "typegen": "sanity schema extract --enforce-required-fields && sanity typegen generate",
     "seed:prepare": "node scripts/prepare-seed.mjs",
-    "seed:import": "npm run seed:prepare && node scripts/import-seed.mjs"
+    "seed:import": "npm run seed:prepare && node scripts/import-seed.mjs",
+    "context:import": "node scripts/import-context.mjs"
   },
   "dependencies": {
     "@sanity/icons": "^5.2.2",
