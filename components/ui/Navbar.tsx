@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { Bell } from "lucide-react";
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { Button } from "@/components/ui/button";
 
-export function Navbar({ user }: { user?: { avatarUrl?: string } }) {
+export function Navbar() {
   return (
     <nav className="border-b border-neutral-200 px-4 sm:px-6">
       <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-2">
@@ -28,12 +30,25 @@ export function Navbar({ user }: { user?: { avatarUrl?: string } }) {
           >
             <Bell className="size-5" />
           </span>
-          <span className="size-9 shrink-0 overflow-hidden rounded-full bg-neutral-200">
-            {user?.avatarUrl && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={user.avatarUrl} alt="" className="size-full object-cover" />
-            )}
-          </span>
+          <Show when="signed-out">
+            <div className="flex items-center gap-2 sm:gap-4">
+              <span className="hidden sm:inline-flex">
+                <SignInButton mode="modal">
+                  <Button variant="text" className="h-9">
+                    Sign in
+                  </Button>
+                </SignInButton>
+              </span>
+              <SignUpButton mode="modal">
+                <Button variant="primary" className="h-9 px-3.5">
+                  Sign up
+                </Button>
+              </SignUpButton>
+            </div>
+          </Show>
+          <Show when="signed-in">
+            <UserButton />
+          </Show>
         </div>
       </div>
     </nav>
